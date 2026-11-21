@@ -1,14 +1,205 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#090711" />
-    <meta name="description" content="Discover, share and showcase creations from across The Unstable Origins network." />
-    <title>UO Marketplace — The Unstable Origins Network</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UO Marketplace — The Unstable Origins</title>
+<meta name="description" content="The official Minecraft-inspired marketplace of The Unstable Origins: listings, drops and creators.">
+<meta property="og:title" content="UO Marketplace"><meta property="og:description" content="Listings, drops and creators from The Unstable Origins.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='3' fill='%235cb338'/%3E%3Crect y='3' width='8' height='5' fill='%237a5230'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+:root{--grass:#5cb338;--forest:#2f6b2a;--lime:#a6e34a;--sky:#7ec8f2;--cyan:#27c4d6;--stone:#8a8d91;--dirt:#7a5230;--sand:#f1e4b3;--gold:#f5b82e;--ink:#17261a;--bg:#f6fbef;--card:#fff;--line:#1d2b1f;color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f1a12;--card:#1a2a1e;--ink:#eaf6e0;--line:#000;--sand:#2a2a1a;color-scheme:dark}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 16px/1.5 Nunito,system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3,.px{font-family:Silkscreen,monospace;letter-spacing:.02em;line-height:1.15}
+a{color:inherit}img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 18px;font:700 15px Nunito;background:var(--grass);color:#fff;border:3px solid var(--line);box-shadow:0 5px 0 var(--forest);cursor:pointer;text-decoration:none;transition:transform .1s,box-shadow .1s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--forest)}
+.btn.alt{background:var(--gold);color:#3a2a00;box-shadow:0 5px 0 #b07f0b}.btn.sm{min-height:36px;padding:4px 12px}.btn.red{background:#d9534f;box-shadow:0 5px 0 #8f2c29}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+#ann{background:var(--gold);color:#3a2a00;text-align:center;padding:8px 16px;font-weight:800}
+header{position:sticky;top:0;z-index:20;background:var(--forest);border-bottom:4px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+nav{display:flex;align-items:center;gap:8px;min-height:56px;flex-wrap:wrap}
+.logo{font:700 18px Silkscreen;color:#fff;text-decoration:none;margin-right:auto}.logo span{color:var(--lime)}
+nav a.l{color:#fff;text-decoration:none;padding:10px 12px;font-weight:800;min-height:44px;display:inline-flex;align-items:center}
+nav a.l.on{background:rgba(0,0,0,.25)}
+.hero{position:relative;background:linear-gradient(var(--sky),#cdeefc 70%);overflow:hidden;padding:48px 0 0;border-bottom:4px solid var(--line)}
+.hero h1{font-size:clamp(28px,6vw,56px);margin:0 0 12px;color:var(--ink);max-width:14ch}
+.hero p{max-width:46ch;font-size:18px;color:#1d3a24}
+.hero .g{display:grid;gap:24px;grid-template-columns:1.2fr 1fr;align-items:center}
+@media(max-width:760px){.hero .g{grid-template-columns:1fr}}
+.terrain{height:64px;margin-top:24px;background:linear-gradient(var(--grass) 0 16px,var(--dirt) 16px);image-rendering:pixelated;border-top:4px solid var(--forest)}
+.blocks{position:relative;height:260px}
+.blk{position:absolute;width:72px;height:72px;border:3px solid var(--line);animation:fl 5s ease-in-out infinite;background:linear-gradient(var(--grass) 0 28%,var(--dirt) 28%)}
+.blk.s{background:repeating-conic-gradient(var(--stone) 0 25%,#a5a8ac 0 50%) 0 0/24px 24px}.blk.g{background:var(--gold)}.blk.p{background:linear-gradient(135deg,var(--cyan),var(--sky));box-shadow:0 0 30px var(--cyan)}
+@keyframes fl{50%{transform:translateY(-16px) rotate(4deg)}}
+.hero .wrap{position:relative;z-index:2}
+.scene{position:relative;height:300px;perspective:900px;transition:transform .25s ease-out;transform-style:preserve-3d}
+.fl{position:absolute;animation:bob 5s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-18px)}}
+.cube{position:relative;width:84px;height:84px;transform-style:preserve-3d;animation:spin 16s linear infinite}
+@keyframes spin{from{transform:rotateX(-24deg) rotateY(0)}to{transform:rotateX(-24deg) rotateY(360deg)}}
+.cube i{position:absolute;inset:0;border:2px solid rgba(0,0,0,.45);image-rendering:pixelated;backface-visibility:hidden}
+.cube i:nth-child(1){transform:translateZ(42px)}.cube i:nth-child(2){transform:rotateY(90deg) translateZ(42px);filter:brightness(.82)}.cube i:nth-child(3){transform:rotateY(180deg) translateZ(42px);filter:brightness(.7)}.cube i:nth-child(4){transform:rotateY(-90deg) translateZ(42px);filter:brightness(.88)}.cube i:nth-child(5){transform:rotateX(90deg) translateZ(42px);filter:brightness(1.12)}.cube i:nth-child(6){transform:rotateX(-90deg) translateZ(42px);filter:brightness(.55)}
+.grass i{background:linear-gradient(#5cb338 0 24%,transparent 24%),radial-gradient(#5e3d20 20%,transparent 22%) 0 0/14px 14px,radial-gradient(#946a40 18%,transparent 20%) 7px 7px/14px 14px,#7a5230}
+.grass i:nth-child(5){background:radial-gradient(#4a9a2d 20%,transparent 22%) 0 0/12px 12px,radial-gradient(#8be05a 18%,transparent 20%) 6px 6px/12px 12px,#5cb338}
+.grass i:nth-child(6){background:radial-gradient(#5e3d20 20%,transparent 22%) 0 0/14px 14px,#7a5230}
+.stone i{background:radial-gradient(#6d7074 22%,transparent 24%) 0 0/16px 16px,radial-gradient(#b3b6ba 18%,transparent 20%) 8px 8px/16px 16px,#8a8d91}
+.gold i{background:linear-gradient(135deg,#fff3b0 0 18%,transparent 18% 40%,#fff3b055 40% 50%,transparent 50%),radial-gradient(#d99a0b 22%,transparent 24%) 0 0/14px 14px,#f5b82e}
+.dia i{background:radial-gradient(#27c4d6 28%,transparent 30%) 4px 6px/28px 28px,radial-gradient(#9af0f8 14%,transparent 16%) 18px 20px/28px 28px,radial-gradient(#6d7074 22%,transparent 24%) 0 0/16px 16px,#8a8d91}
+.sun{position:absolute;right:8%;top:22px;width:56px;height:56px;background:#ffe27a;box-shadow:0 0 0 8px #fff3b0aa,0 0 70px 24px #ffe27a88;animation:pul 6s ease-in-out infinite}@keyframes pul{50%{transform:scale(1.08)}}
+.cloud{position:absolute;left:-200px;width:96px;height:24px;background:#fff;opacity:.92;box-shadow:24px -24px #fff,48px -24px #fff,72px 0 #fff,24px 0 #fff,48px 0 #fff;animation:dr var(--d,70s) linear infinite;animation-delay:var(--l,0s)}@keyframes dr{to{transform:translateX(calc(100vw + 400px))}}
+.ff{position:absolute;width:6px;height:6px;background:var(--lime);box-shadow:0 0 10px 3px #a6e34aaa;animation:ffa 7s ease-in infinite;opacity:0}@keyframes ffa{0%{opacity:0;transform:translate(0,0)}20%{opacity:1}100%{opacity:0;transform:translate(24px,-140px)}}
+.portal{position:absolute;right:2%;bottom:6px;width:96px;height:150px;border:12px solid #1c2229;overflow:hidden;background:#06303a;animation:glow 3s ease-in-out infinite;box-shadow:0 0 40px #27c4d6aa,inset 0 0 20px #000}
+.portal div{position:absolute;inset:-60%;background:conic-gradient(#27c4d6,#063a46,#7ef0c8,#0b6a7a,#27c4d6);animation:rot 6s linear infinite;filter:blur(6px)}@keyframes rot{to{transform:rotate(360deg)}}@keyframes glow{50%{box-shadow:0 0 80px #7ef0c8cc,inset 0 0 20px #000}}
+.hero .g>div:first-child>*{animation:up .8s cubic-bezier(.2,.8,.2,1) both}.hero .g>div:first-child>:nth-child(2){animation-delay:.12s}.hero .g>div:first-child>:nth-child(3){animation-delay:.24s}.hero .g>div:first-child>:nth-child(4){animation-delay:.34s}@keyframes up{from{opacity:0;transform:translateY(26px)}}
+.rv{opacity:0;transform:translateY(24px) scale(.97);transition:opacity .5s,transform .5s cubic-bezier(.2,.8,.2,1)}.rv.in{opacity:1;transform:none}
+.btn{position:relative;overflow:hidden}.btn::after{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,#fff7,transparent);transform:skewX(-20deg);transition:left .5s}.btn:hover::after{left:130%}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+section{padding:36px 0}h2{font-size:clamp(20px,4vw,28px);margin:0 0 16px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr))}
+.card{background:var(--card);border:3px solid var(--line);box-shadow:0 5px 0 var(--stone);display:flex;flex-direction:column;text-decoration:none;transition:transform .15s}
+.card:hover{transform:translateY(-3px)}
+.thumb{aspect-ratio:4/3;background:var(--sand) center/cover;border-bottom:3px solid var(--line);display:grid;place-items:center;font:700 40px Silkscreen;color:var(--dirt)}
+.cb{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}.cb h3{margin:0;font-size:15px}
+.price{font-weight:800;font-size:18px}.price s{opacity:.55;font-weight:500;font-size:14px;margin-left:6px}
+.tag{display:inline-block;font-size:12px;font-weight:800;padding:2px 8px;background:var(--sand);border:2px solid var(--line);margin:0 4px 4px 0}
+.tag.g{background:var(--gold);color:#3a2a00}.tag.r{background:#ffd6d3}.tag.c{background:var(--cyan);color:#06303a}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+input,select,textarea{font:inherit;min-height:44px;padding:8px 10px;border:3px solid var(--line);background:var(--card);color:var(--ink);max-width:100%}
+textarea{width:100%;min-height:80px}.bar input[type=search]{flex:1;min-width:160px}
+.cd{display:flex;gap:8px}.cd div{background:var(--ink);color:var(--lime);padding:6px 10px;text-align:center;font:700 20px Silkscreen;min-width:56px}.cd small{display:block;font:700 10px Nunito;color:#fff}
+.sk{background:linear-gradient(90deg,#0001,#0002,#0001) var(--card);height:220px;border:3px solid var(--line);animation:sh 1.2s infinite;background-size:200%}@keyframes sh{to{background-position:-200%}}
+.empty{padding:32px;text-align:center;border:3px dashed var(--stone)}
+.pd{display:grid;gap:24px;grid-template-columns:1fr 1fr}@media(max-width:760px){.pd{grid-template-columns:1fr}}
+.pd .thumb{aspect-ratio:1;border:3px solid var(--line)}
+footer{background:var(--ink);color:#eaf6e0;padding:32px 0;margin-top:24px;border-top:6px solid var(--grass)}
+.adm{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:20px}
+.stat{background:var(--card);border:3px solid var(--line);padding:12px}.stat b{font:700 28px Silkscreen;display:block;color:var(--forest)}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--card);border:3px solid var(--line);padding:8px 12px;margin-bottom:8px}
+.form{display:grid;gap:10px;background:var(--card);border:3px solid var(--line);padding:14px;margin:12px 0}.form label{display:grid;gap:4px;font-weight:800;font-size:14px}
+.form label.ck{display:flex;align-items:center;gap:8px}.form input[type=checkbox]{width:24px;min-height:24px}
+.tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch}.tabs .btn{flex:none;white-space:nowrap;padding:8px 14px}.stat b{color:var(--grass)!important}
+#toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border:3px solid var(--lime);z-index:50;display:none}
+</style></head><body>
+<div id="ann" hidden></div>
+<header><div class="wrap"><nav id="nav"></nav></div></header>
+<main id="app" class="wrap"></main>
+<footer><div class="wrap"><b class="px" id="fname">UO Marketplace</b><p id="ftext"></p><p><a href="#admin">Creator Control Room</a></p></div></footer>
+<div id="toast" role="status"></div>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const SEED={site:{headline:'Craft. Collect. Drop.',sub:'The official marketplace of The Unstable Origins: builds, packs and gear from our creators.',announcement:'Welcome to the UO Marketplace!',showAnn:true,footer:'© The Unstable Origins. Not affiliated with Mojang or Microsoft.',cur:'$'},
+products:[{id:'s1',name:'Starter Castle Schematic',price:9,orig:12,cat:'Builds',desc:'A fully detailed castle ready to paste into your world.',tags:'castle,medieval',stock:40,featured:true,limited:false,published:true,creator:'c1'},{id:'s2',name:'Portal Hub Pack',price:6,cat:'Packs',desc:'Nether-style hub with animated portals.',tags:'hub',stock:5,featured:true,limited:true,published:true,creator:'c1'}],
+drops:[{id:'d1',name:'Winter Terrain Drop',date:new Date(Date.now()+864e5*7).toISOString().slice(0,16),desc:'Snowy biomes and ice builds.',published:true,featured:true}],
+creators:[{id:'c1',name:'UO Team',user:'uo',bio:'The builders behind The Unstable Origins.',featured:true}],discounts:[]};
+let S={site:{...SEED.site},products:[],drops:[],creators:[],discounts:[]},live=false,db=null,isAdmin=false,assets=null,cart=[],err='';
+const COLS=['products','drops','creators','discounts'];
+let canEd=false,isOwner=false,ME=null;
+function calc(){const em=(ME?.email||'').toLowerCase();isAdmin=isOwner||(canEd&&(S.admins||[]).map(x=>String(x).toLowerCase()).includes(em))}
+const M=n=>(S.site.cur||'$')+Number(n||0).toFixed(2);
+function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2500)}
+async function boot(){
+ S={site:{...SEED.site},...Object.fromEntries(COLS.map(c=>[c,[]]))};render();
+ try{const c=await claude.use('db'),u=await claude.use('user');assets=await claude.use('assets');
+  if(c){db=c;live=true;canEd=(await u?.canEdit?.())??false;isOwner=(await u?.isOwner?.())??false;try{ME=await u?.me?.()}catch(x){}calc();c.collection('site').doc('admins').onSnapshot(s=>{S.admins=s.exists?(s.data().emails||[]):[];calc();render()},e=>{err=e.message});
+   COLS.forEach(n=>c.collection(n).onSnapshot(s=>{S[n]=s.docs.map(d=>({id:d.id,...d.data()}));render()},e=>{err=e.message}));
+   c.collection('site').doc('main').onSnapshot(s=>{if(s.exists)S.site={...SEED.site,...s.data()};render()});
+   setTimeout(()=>{if(live&&COLS.every(n=>!S[n].length)){COLS.slice(0,3).forEach(n=>S[n]=SEED[n]);render()}},2500)}
+ }catch(e){err=e.message}
+ if(!live){COLS.forEach(n=>S[n]=SEED[n]||[]);render()}}
+const pub=a=>a.filter(x=>x.published!==false);
+const img=(x,k)=>x[k||'img']?`style="background-image:url('${esc(x[k||'img'])}')"`:'';
+const crName=id=>(S.creators.find(c=>c.id===id)||{}).name||'';
+function pcard(p){const off=p.orig>p.price?Math.round(100-p.price/p.orig*100):0;
+ return `<a class="card" href="#p/${p.id}"><div class="thumb" ${img(p)}>${p.img?'':esc((p.name||'?')[0])}</div><div class="cb"><div>${p.featured?'<span class="tag g">Featured</span>':''}${p.limited?'<span class="tag r">Limited</span>':''}${off?`<span class="tag c">-${off}%</span>`:''}</div><h3>${esc(p.name)}</h3><div class="price">${M(p.price)}${p.orig>p.price?`<s>${M(p.orig)}</s>`:''}</div><small>${p.stock>0?(p.stock<=5?'Only '+p.stock+' left':'In stock'):'Sold out'}</small></div></a>`}
+function dcard(d){const t=new Date(d.date).getTime(),st=isNaN(t)?'ended':t>Date.now()?'upcoming':(d.end&&new Date(d.end)<Date.now()?'ended':'live');
+ return `<div class="card"><div class="thumb" ${img(d,'cover')}>${d.cover?'':'⛏'}</div><div class="cb"><span class="tag ${st=='live'?'g':''}">${st}</span><h3>${esc(d.name)}</h3><p>${esc(d.desc)}</p>${st=='upcoming'?`<div class="cd" data-t="${t}"></div>`:''}</div></div>`}
+function ccard(c){return `<a class="card" href="#c/${c.id}"><div class="thumb" ${img(c,'avatar')}>${c.avatar?'':esc((c.name||'?')[0])}</div><div class="cb"><h3>${esc(c.name)}</h3><small>@${esc(c.user)}</small><p>${esc(c.bio)}</p></div></a>`}
+const sec=(t,h,items,f)=>`<section><h2>${t}</h2>${items.length?`<div class="grid">${items.map(f).join('')}</div>`:`<div class="empty">${h}</div>`}</section>`;
+const cube=(c,st,d)=>`<div class="fl" style="${st};animation-delay:${d}s"><div class="cube ${c}" style="animation-delay:${d*2}s">${'<i></i>'.repeat(6)}</div></div>`;
+function home(){const P=pub(S.products),s=S.site;
+ return `<div class="hero" style="margin:0 -16px;padding-left:16px;padding-right:16px"><div class="sun" aria-hidden="true"></div><i class="cloud" style="top:30px;--d:80s"></i><i class="cloud" style="top:120px;--d:110s;--l:-40s;transform:scale(.7)"></i>${Array.from({length:14},(_,i)=>`<b class="ff" aria-hidden="true" style="left:${(i*37+11)%100}%;top:${35+(i*53)%55}%;animation-delay:${-i*0.9}s"></b>`).join('')}<div class="wrap g" style="padding:0"><div><h1>${esc(s.headline)}</h1><p>${esc(s.sub)}</p><a class="btn" href="#market">Browse the marketplace</a> <a class="btn alt" href="#drops">See drops</a></div><div class="scene" aria-hidden="true">${cube('grass','left:6%;top:50px',0)}${cube('stone','left:40%;top:0',-1.5)}${cube('gold','left:22%;top:160px',-3)}${cube('dia','left:52%;top:130px',-2)}<div class="portal"><div></div></div></div></div><div class="terrain" style="margin:0 -16px"></div></div>`+
+ sec('Featured listings','No featured listings yet.',P.filter(p=>p.featured).slice(0,4),pcard)+
+ sec('Drops','No drops scheduled.',pub(S.drops).slice(0,3),dcard)+
+ sec('Creators','No creators yet.',S.creators.filter(c=>c.featured),ccard)+
+ sec('Recently added','Nothing here yet.',[...P].sort((a,b)=>(b.created||0)-(a.created||0)).slice(0,4),pcard)}
+let F={q:'',cat:'',sort:'new',max:''};
+function market(){const P=pub(S.products),cats=[...new Set(P.map(p=>p.cat).filter(Boolean))];
+ let L=P.filter(p=>(!F.q||(p.name+p.tags+p.desc).toLowerCase().includes(F.q.toLowerCase()))&&(!F.cat||p.cat==F.cat)&&(!F.max||p.price<=+F.max));
+ L.sort((a,b)=>F.sort=='lo'?a.price-b.price:F.sort=='hi'?b.price-a.price:(b.created||0)-(a.created||0));
+ return `<section><h2>Marketplace</h2><div class="bar"><input type="search" id="fq" placeholder="Search listings" value="${esc(F.q)}" aria-label="Search"><select id="fc" aria-label="Category"><option value="">All categories</option>${cats.map(c=>`<option ${c==F.cat?'selected':''}>${esc(c)}</option>`).join('')}</select><select id="fs" aria-label="Sort"><option value="new">Newest</option><option value="lo" ${F.sort=='lo'?'selected':''}>Price: low</option><option value="hi" ${F.sort=='hi'?'selected':''}>Price: high</option></select><input id="fm" type="number" min="0" placeholder="Max price" value="${F.max}" style="width:120px"></div>${L.length?`<div class="grid">${L.map(pcard).join('')}</div>`:'<div class="empty">No listings match. Try clearing filters.</div>'}</section>`}
+function product(id){const p=S.products.find(x=>x.id==id);if(!p)return '<div class="empty">Listing not found. <a href="#market">Back to marketplace</a></div>';
+ return `<section class="pd"><div class="thumb" ${img(p)}>${p.img?'':esc(p.name[0])}</div><div><h1 class="px">${esc(p.name)}</h1><div class="price">${M(p.price)}${p.orig>p.price?`<s>${M(p.orig)}</s>`:''}</div><p>${esc(p.desc)}</p><p>${(p.tags||'').split(',').filter(x=>x.trim()).map(t=>`<span class="tag">${esc(t.trim())}</span>`).join('')}</p><p>Category: ${esc(p.cat)} · ${p.stock>0?p.stock+' in stock':'Sold out'}${p.creator?` · by <a href="#c/${p.creator}">${esc(crName(p.creator))}</a>`:''}</p>${p.updated?`<small>Updated ${new Date(p.updated).toLocaleDateString()}</small><br>`:''}<br><button class="btn" id="add" ${p.stock>0?'':'disabled'}>Add to cart</button></div></section>`}
+function creator(id){const c=S.creators.find(x=>x.id==id);if(!c)return '<div class="empty">Creator not found.</div>';
+ return `<section><div class="thumb" ${img(c,'banner')} style="aspect-ratio:4/1"></div><h1 class="px">${esc(c.name)}</h1><small>@${esc(c.user)}</small><p>${esc(c.bio)}</p>${c.links?`<p><a href="${esc(c.links)}" rel="noopener">Links</a></p>`:''}</section>`+sec('Listings','No listings yet.',pub(S.products).filter(p=>p.creator==id),pcard)}
+function cartV(){const sub=cart.reduce((a,p)=>a+p.price,0);
+ return `<section><h2>Cart</h2>${cart.length?cart.map((p,i)=>`<div class="row"><span>${esc(p.name)}</span><span>${M(p.price)} <button class="btn sm red" data-rm="${i}">Remove</button></span></div>`).join('')+`<p class="price">Subtotal: ${M(sub)}</p><div class="empty">Checkout is not live yet: no payment provider is connected, so nothing can be purchased. Promo codes will be validated on the server once payments exist.</div>`:'<div class="empty">Your cart is empty.</div>'}</section>`}
+/* ADMIN */
+const SCHEMA={products:[['name'],['price','n'],['orig','n','Original price'],['cat','t','Category'],['desc','a','Description'],['tags'],['stock','n'],['img','i','Image'],['creator','s','Creator'],['featured','b'],['limited','b'],['published','b']],
+drops:[['name'],['date','d','Release date'],['end','d','End date'],['desc','a','Description'],['cover','i','Cover'],['featured','b'],['published','b']],
+creators:[['name'],['user','t','Username'],['bio','a','Biography'],['avatar','i','Profile picture'],['banner','i','Banner'],['links','t','Social link'],['featured','b']],
+discounts:[['name','t','Campaign name'],['code'],['type','y','Type'],['value','n'],['start','d'],['expires','d'],['limit','n','Usage limit'],['active','b']]};
+let A={tab:'dash',edit:null};
+function field(c,[k,t='t',l],v){l=l||k[0].toUpperCase()+k.slice(1);const val=v?.[k]??'';
+ if(t=='b')return `<label class="ck"><input type="checkbox" name="${k}" ${val===''?(k=='published'||k=='active'?'checked':''):val?'checked':''}> ${l}</label>`;
+ if(t=='a')return `<label>${l}<textarea name="${k}">${esc(val)}</textarea></label>`;
+ if(t=='s')return `<label>${l}<select name="${k}"><option value="">None</option>${S.creators.map(x=>`<option value="${x.id}" ${x.id==val?'selected':''}>${esc(x.name)}</option>`).join('')}</select></label>`;
+ if(t=='y')return `<label>${l}<select name="${k}"><option value="pct">Percentage</option><option value="fixed" ${val=='fixed'?'selected':''}>Fixed amount</option></select></label>`;
+ if(t=='i')return `<label>${l}<input name="${k}" value="${esc(val)}" placeholder="Image URL or upload"><input type="file" accept="image/*" data-up="${k}"></label>`;
+ return `<label>${l}<input name="${k}" type="${t=='n'?'number':t=='d'?'datetime-local':'text'}" step="any" value="${esc(val)}"></label>`}
+function admin(){
+ const dg=`<p><small>Status: database ${live?'connected':'NOT connected'} · signed in as ${esc(ME?.email||'unknown')} · owner: ${isOwner} · can edit: ${canEd}${err?' · error: '+esc(err):''}</small></p>`;
+ if(!live)return `<div class="empty"><h2>Admin needs sign-in</h2>Open this link in the Claude app or claude.ai while signed in with the owner account. The public cannot edit anything.${dg}</div>`;
+ if(!isAdmin)return `<div class="empty"><h2>No access</h2>Only the owner and approved emails can use the Creator Control Room.${dg}</div>`;
+ const tabs=['dash',...COLS,'site',...(isOwner?['team']:[])],n=A.tab;
+ let h=`<section><h2>Creator Control Room</h2><div class="tabs">${tabs.map(t=>`<button class="btn sm ${t==n?'':'alt'}" data-tab="${t}">${t=='dash'?'Dashboard':t=='site'?'Content & settings':t=='team'?'Allowed emails':t[0].toUpperCase()+t.slice(1)}</button>`).join('')}</div>`;
+ if(n=='dash'){const up=S.drops.filter(d=>new Date(d.date)>Date.now()).length;
+  h+=`<div class="adm">${[['Listings',S.products.length],['Published',pub(S.products).length],['Drops',S.drops.length],['Upcoming',up],['Discounts',S.discounts.filter(d=>d.active!==false).length],['Creators',S.creators.length]].map(([a,b])=>`<div class="stat"><b>${b}</b>${a}</div>`).join('')}</div><p>System status: database connected, uploads ${assets?'ready':'unavailable'}.</p>${!S.products.some(p=>!p.id.startsWith('s'))&&!S.drops.some(d=>d.id!='d1')?'<button class="btn alt" id="seed">Save starter content to the database</button>':''}`}
+ else if(n=='site'){const s=S.site;h+=`<form class="form" id="sf">${[['headline'],['sub','a','Homepage description'],['announcement','t','Announcement bar'],['footer','a','Footer text'],['cur','t','Currency symbol']].map(f=>field('',f,s)).join('')}<label class="ck"><input type="checkbox" name="showAnn" ${s.showAnn!==false?'checked':''}> Show announcement bar</label><label class="ck"><input type="checkbox" name="maint" ${s.maint?'checked':''}> Maintenance mode</label><button class="btn">Save content</button></form>`}
+ else if(n=='team'){h+=`<form class="form" id="tf"><label>Emails allowed in the Control Room (one per line; you, the owner, always have access)<textarea name="emails" style="min-height:140px">${esc((S.admins||[]).join('\n'))}</textarea></label><button class="btn">Save allowed emails</button><small>Also share this page with each person as an Editor so they can save changes. Sign-in emails are verified by Claude.</small></form>`}
+ else{const sch=SCHEMA[n],e=A.edit;
+  h+=`<button class="btn" data-new="1">New ${n.slice(0,-1)}</button>`;
+  if(e)h+=`<form class="form" id="ef" data-id="${e.id||''}">${sch.map(f=>field(n,f,e)).join('')}<div><button class="btn">Save</button> <button type="button" class="btn alt" data-cancel="1">Cancel</button></div></form>`;
+  h+=`<div style="margin-top:12px">${S[n].length?S[n].map(x=>`<div class="row"><span>${esc(x.name||x.code)} ${x.published===false?'<span class="tag">Draft</span>':''}</span><span><button class="btn sm" data-ed="${x.id}">Edit</button> <button class="btn sm alt" data-dup="${x.id}">Duplicate</button> <button class="btn sm red" data-del="${x.id}">Delete</button></span></div>`).join(''):'<div class="empty">Nothing here yet. Create the first one.</div>'}</div>`}
+ return h+'</section>'}
+function collect(f,sch){const o={};sch.forEach(([k,t])=>{const el=f.elements[k];if(!el)return;o[k]=t=='b'?el.checked:t=='n'?(el.value===''?null:+el.value):el.value});return o}
+async function save(n,id,o){try{const now=Date.now();o.updated=now;const ref=db.collection(n).doc(id||('i'+now.toString(36)));if(!id)o.created=now;else{const ex=S[n].find(x=>x.id==id);o.created=ex?.created||now}await ref.set(o);toast('Saved')}catch(e){toast('Save failed: '+e.message)}}
+document.addEventListener('click',async e=>{const t=e.target.closest('[data-tab],[data-new],[data-cancel],[data-ed],[data-dup],[data-del],[data-rm],#add,#seed');if(!t)return;const n=A.tab,d=t.dataset;
+ if(d.tab){A={tab:d.tab,edit:null}}else if(d.new)A.edit={};else if(d.cancel)A.edit=null;else if(d.ed)A.edit=S[n].find(x=>x.id==d.ed);
+ else if(d.dup){const x={...S[n].find(x=>x.id==d.dup)};delete x.id;x.name=(x.name||'')+' (copy)';x.published=false;await save(n,'',x);return}
+ else if(d.del){if(confirm('Delete this permanently?')){try{await db.collection(n).doc(d.del).delete();toast('Deleted')}catch(er){toast(er.message)}}return}
+ else if(d.rm!==undefined)cart.splice(+d.rm,1);
+ else if(t.id=='add'){const p=S.products.find(x=>x.id==location.hash.split('/')[1]);cart.push(p);toast('Added to cart');nav();return}
+ else if(t.id=='seed'){for(const c of COLS.slice(0,3))for(const x of SEED[c]){const{id,...r}=x;await db.collection(c).doc(id).set({...r,created:Date.now()})}await db.collection('site').doc('main').set(SEED.site);toast('Starter content saved');return}
+ render()});
+document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target;
+ if(f.id=='sf'){const o={};[...f.elements].forEach(x=>{if(x.name)o[x.name]=x.type=='checkbox'?x.checked:x.value});try{await db.collection('site').doc('main').set(o);toast('Saved')}catch(er){toast(er.message)}}
+ else if(f.id=='tf'){const em=[...new Set(f.elements.emails.value.split(/[\s,;]+/).map(x=>x.trim().toLowerCase()).filter(x=>/^\S+@\S+\.\S+$/.test(x)))];try{await db.collection('site').doc('admins').set({emails:em});toast('Saved '+em.length+' email(s)')}catch(er){toast(er.message)}}
+ else if(f.id=='ef'){await save(A.tab,f.dataset.id,collect(f,SCHEMA[A.tab]));A.edit=null;render()}});
+document.addEventListener('change',async e=>{const t=e.target;
+ if(t.id=='fq'||t.id=='fc'||t.id=='fs'||t.id=='fm'){F={q:$('#fq').value,cat:$('#fc').value,sort:$('#fs').value,max:$('#fm').value};render();const q=$('#fq');if(t.id=='fq'){q.focus();q.setSelectionRange(99,99)}}
+ if(t.dataset.up){if(!assets)return toast('Uploads unavailable for your account');const f=t.files[0];if(!f)return;if(f.size>8e6)return toast('Image too large (max 8 MB)');try{toast('Uploading…');const r=await assets.upload(f);t.form.elements[t.dataset.up].value=r.url;toast('Uploaded')}catch(er){toast('Upload failed: '+er.message)}}});
+document.addEventListener('input',e=>{if(e.target.id=='fq'){clearTimeout(input.t);input.t=setTimeout(()=>e.target.dispatchEvent(new Event('change',{bubbles:true})),300)}});
+function input(){}
+function nav(){const h=location.hash.slice(1)||'home',on=x=>h.split('/')[0]==x?'on':'';
+ $('#nav').innerHTML=`<a class="logo" href="#home">UO <span>Market</span></a><a class="l ${on('home')}" href="#home">Home</a><a class="l ${on('market')}" href="#market">Market</a><a class="l ${on('drops')}" href="#drops">Drops</a><a class="l ${on('creators')}" href="#creators">Creators</a><a class="l ${on('cart')}" href="#cart">Cart (${cart.length})</a>`}
+function render(){const [r,id]=(location.hash.slice(1)||'home').split('/'),s=S.site;
+ document.title=(s.name||'UO Marketplace')+' — The Unstable Origins';
+ const a=$('#ann');a.hidden=!(s.showAnn!==false&&s.announcement);a.textContent=s.announcement||'';$('#ftext').textContent=s.footer||'';
+ if(s.maint&&!isAdmin&&r!='admin'){$('#app').innerHTML='<div class="empty"><h2>Back soon</h2>The marketplace is being updated.</div>';nav();return}
+ const act=document.activeElement?.id;
+ $('#app').innerHTML=({home,market,drops:()=>`<section><h2>Drops</h2>${pub(S.drops).length?`<div class="grid">${pub(S.drops).map(dcard).join('')}</div>`:'<div class="empty">No drops yet.</div>'}</section>`,creators:()=>sec('Creators','No creators yet.',S.creators,ccard),p:()=>product(id),c:()=>creator(id),cart:cartV,admin}[r]||home)();
+ nav();if(act&&act!='fq')$('#'+act)?.focus();
+ const fresh=render.last!==location.hash;render.last=location.hash;
+ if(fresh&&!matchMedia('(prefers-reduced-motion:reduce)').matches){const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);setTimeout(()=>en.target.classList.remove('rv','in'),700)}}),{threshold:.1});document.querySelectorAll('#app .card,#app section>h2,#app .row,#app .empty').forEach((el,i)=>{el.style.transitionDelay=(i%6)*60+'ms';el.classList.add('rv');io.observe(el)})}}
+setInterval(()=>document.querySelectorAll('.cd').forEach(el=>{let d=el.dataset.t-Date.now();if(d<0)d=0;const u=[['d',864e5],['h',36e5],['m',6e4],['s',1e3]];el.innerHTML=u.map(([l,m])=>{const v=Math.floor(d/m);d-=v*m;return `<div>${String(v).padStart(2,'0')}<small>${l}</small></div>`}).join('')}),1000);
+addEventListener('hashchange',()=>{render();scrollTo(0,0)});
+let tc=null;const RM=matchMedia('(prefers-reduced-motion:reduce)');
+addEventListener('pointermove',e=>{if(e.pointerType!='mouse'||RM.matches)return;
+ const sc=document.querySelector('.scene');if(sc){sc.style.transform=`rotateY(${(e.clientX/innerWidth-.5)*14}deg) rotateX(${-(e.clientY/innerHeight-.5)*10}deg)`}
+ const c=e.target.closest?.('.card');if(tc&&tc!==c){tc.style.transform='';tc=null}
+ if(c&&!c.classList.contains('rv')){const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(700px) rotateX(${-y*9}deg) rotateY(${x*9}deg) translateY(-4px)`;tc=c}});
+boot();
+</script></body></html>
